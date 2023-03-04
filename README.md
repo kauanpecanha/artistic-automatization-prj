@@ -21,4 +21,3 @@ This project is looking foward to develop arduino software in order to automate 
 - [@Fellipz1](https://www.github.com/Fellipz1): Serra  Jr. Engenharia's Mechanical Engineer
 
 - [@ViniciusCMB](https://www.github.com/ViniciusCMB): Serra  Jr. Engenharia's Mechanical Engineer
-
