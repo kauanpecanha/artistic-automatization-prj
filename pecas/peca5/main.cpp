@@ -1,143 +1,263 @@
-#include <Arduino.h> /* Just in case of using the vscode ide for arduino programming, not needed if using the commom arduino ide */
-#define RPWM 5
-#define LPWM 6
+// #include <Arduino.h> /* Just in case of using the vscode ide for arduino programming, not needed if using the commom arduino ide */
+// #include <RotaryEncoder.h>
+// #define RPWM 5
+// #define LPWM 6
 
-/*
-  Pins connected to aduino( in english )
+// /*
+//   Pins connected to aduino( in english )
 
-  IBT-2 pin 1 (RPWM) to Arduino pin 5(PWM)
-  IBT-2 pin 2 (LPWM) to Arduino pin 6(PWM)
-  IBT-2 pins 3 (R_EN), 4 (L_EN), 7 (VCC) to Arduino 5V
-  IBT-2 pin 8 (GND) to Arduino's GND
-  IBT-2 pins 5 (R_IS) and 6 (L_IS) not connected
-*/
+//   IBT-2 pin 1 (RPWM) to Arduino pin 5(PWM)
+//   IBT-2 pin 2 (LPWM) to Arduino pin 6(PWM)
+//   IBT-2 pins 3 (R_EN), 4 (L_EN), 7 (VCC) to Arduino 5V
+//   IBT-2 pin 8 (GND) to Arduino's GND
+//   IBT-2 pins 5 (R_IS) and 6 (L_IS) not connected
+// */
 
-// variável da velocidade - velocity variables
-float vel = 0;
+// // rotary encoder pins
+// const int pin1 = 2;
+// const int pin2 = 3;
 
-// pino central do potenciometro - potentiometer center pin
-int pot = A0;
+// RotaryEncoder encoder(pin1, pin2, RotaryEncoder::LatchMode::TWO03);
 
-int sequencia = 0;
+// void rotateMotor(bool b, int vel) /*  function to set the sense of rotation of the motor */
+// {
+//     if (b == true)
+//     {
+//         // gira para direita - rotate to the right
+//         analogWrite(LPWM, 0);
+//         analogWrite(RPWM, vel);
+//     }
+//     else
+//     {
+//         // gira para esquerda - rotate to the left
+//         analogWrite(RPWM, 0);
+//         analogWrite(LPWM, vel);
+//     }
+// }
 
-long currentMillis;
+// void stopMotor() /*  function to stop the motor rotation  */
+// {
+//     // para o motor - stop the motor
+//     analogWrite(LPWM, 0);
+//     analogWrite(RPWM, 0);
+// }
 
-void rotateMotor(bool b) /*  function to set the sense of rotation of the motor */
-{
-    // leitura da velocidade pelo potenciometro - velocity reading by the potentiometer
-    vel = ((analogRead(pot)) / 4);
+// void setup()
+// {
+//     Serial.begin(9600);
+//     pinMode(RPWM, OUTPUT);
+//     pinMode(LPWM, OUTPUT);
+// }
 
-    if (b == true)
-    {
-        // gira para direita - rotate to the right
-        analogWrite(LPWM, 0);
-        analogWrite(RPWM, vel);
-    }
-    else
-    {
-        // gira para esquerda - rotate to the left
-        analogWrite(RPWM, 0);
-        analogWrite(LPWM, vel);
-    }
-}
+// void loop()
+// {
+//     static int pos = 0;
+//     int newPos;
+//     float ac = 0;
 
-void stopMotor() /*  function to stop the motor rotation  */
-{
-    // para o motor - stop the motor
-    analogWrite(LPWM, 0);
-    analogWrite(RPWM, 0);
-}
 
-void setup()
-{
+//     //  parado
+//     for (unsigned long start = millis(); millis() - start <= 20000;)
+//     {
+//         stopMotor();
+//         Serial.print("Motor status:");
+//         Serial.print(" Stopped ");
+//         Serial.print("|| RPM: 0");
+//         Serial.println(" || PWM: 0");
+//     }
+    
+//     ac = 0; // aceleração - check
+//     for(unsigned long start = millis(); millis() - start <= 10000;) // aceleração por 10 segundos
+//     {
+//       rotateMotor(true, map(ac, 0, 100, 0, 255));
+//       encoder.tick();
+//       newPos = encoder.getPosition();
+//       if(pos != newPos)
+//       {
+//         Serial.print("Motor status:");
+//         Serial.print(" Stopped -> Slow ");
+//         Serial.print("|| RPM: ");
+//         Serial.print((int)(encoder.getRPM()));
+//         Serial.print("|| PWM: ");
+//         Serial.print(map(ac, 0, 100, 0, 255));
+//         Serial.print(" || ac: ");
+//         Serial.println(ac);
+//         pos = newPos;
+//       }      
+//       ac=ac+0.00047; 
+//     }
 
-    pinMode(RPWM, OUTPUT);
-    pinMode(LPWM, OUTPUT);
-}
+//     // velocidade lenta
+//     for (unsigned long start = millis(); millis() - start <= 110000;)
+//     {
+//         rotateMotor(true, map(40, 0, 100, 0, 255));
+//         encoder.tick();
+//         newPos = encoder.getPosition();
+//         if (pos != newPos)
+//         {
+//             Serial.print("Motor status:");
+//             Serial.print(" Moving ");
+//             Serial.print("|| RPM: ");
+//             Serial.print((int)(encoder.getRPM()));
+//             Serial.print(" || PWM: ");
+//             Serial.println(map(40, 0, 100, 0, 255));
+//             pos = newPos;
+//         }
+//     }
 
-void loop()
-{
-    sequencia = random(1, 5);
-    switch (sequencia)
-    {
-    case 1: /*Seq 1*/
-        delay(1000);
+//     ac = 40; // aceleração - check
+//     for(unsigned long start = millis(); millis() - start <= 10000;) // aceleração por 10 segundos
+//     {
+//       rotateMotor(true, map(ac, 0, 100, 0, 255));
+//       encoder.tick();
+//       newPos = encoder.getPosition();
+//       if(pos != newPos)
+//       {
+//         Serial.print("Motor status:");
+//         Serial.print(" Slow -> Medium ");
+//         Serial.print("|| RPM: ");
+//         Serial.print((int)(encoder.getRPM()));
+//         Serial.print("|| PWM: ");
+//         Serial.print(map(ac, 0, 100, 0, 255));
+//         Serial.print(" || ac: ");
+//         Serial.println(ac);
+//         pos = newPos;
+//       }      
+//       ac=ac+0.0008; 
+//     }
 
-        currentMillis = millis();
-        while (millis() - currentMillis <= 30000)
-        {
-            rotateMotor(false);
-        }
-        currentMillis = millis();
-        while (millis() - currentMillis <= 30000)
-        {
-            rotateMotor(false);
-        }
-        stopMotor();
-        break;
+//     // velocidade média
+//     for (unsigned long start = millis(); millis() - start <= 110000;)
+//     {
+//         rotateMotor(true, map(70, 0, 100, 0, 255));
+//         encoder.tick();
+//         newPos = encoder.getPosition();
+//         if (pos != newPos)
+//         {
+//             Serial.print("Motor status:");
+//             Serial.print(" Moving ");
+//             Serial.print("|| RPM: ");
+//             Serial.print((int)(encoder.getRPM()));
+//             Serial.print(" || PWM: ");
+//             Serial.println(map(70, 0, 100, 0, 255));
+//             pos = newPos;
+//         }
+//     }
 
-    case 2: /*Seq 2*/
-        delay(1000);
+//     ac = 70; // aceleração - check
+//     for(unsigned long start = millis(); millis() - start <= 10000;) // aceleração por 10 segundos
+//     {
+//       rotateMotor(true, map(ac, 0, 100, 0, 255));
+//       encoder.tick();
+//       newPos = encoder.getPosition();
+//       if(pos != newPos)
+//       {
+//         Serial.print("Motor status:");
+//         Serial.print(" Medium -> Fast ");
+//         Serial.print("|| RPM: ");
+//         Serial.print((int)(encoder.getRPM()));
+//         Serial.print("|| PWM: ");
+//         Serial.print(map(ac, 0, 100, 0, 255));
+//         Serial.print(" || ac: ");
+//         Serial.println(ac);
+//         pos = newPos;
+//       }      
+//       ac=ac+0.00135; 
+//     }
 
-        currentMillis = millis();
-        while (millis() - currentMillis <= 10000)
-        {
-            rotateMotor(true);
-        }
-        currentMillis = millis();
-        while (millis() - currentMillis <= 50000)
-        {
-            rotateMotor(true);
-        }
-        stopMotor();
-        break;
+//     // velocidade rápida
+//     for (unsigned long start = millis(); millis() - start <= 120000;)
+//     {
+//         rotateMotor(true, map(100, 0, 100, 0, 255));
+//         encoder.tick();
+//         newPos = encoder.getPosition();
+//         if (pos != newPos)
+//         {
+//             Serial.print("Motor status:");
+//             Serial.print(" Moving ");
+//             Serial.print("|| RPM: ");
+//             Serial.print((int)(encoder.getRPM()));
+//             Serial.print(" || PWM: ");
+//             Serial.println(map(100, 0, 100, 0, 255));
+//             pos = newPos;
+//         }
+//     }
 
-    case 3: /*Seq 3*/
-        delay(1000);
+//     ac = 100; // desaceleração - check
+//     for(unsigned long start = millis(); millis() - start <= 10000;) // desaceleração por 10 segundos
+//     {
+//       rotateMotor(true, map(ac, 0, 100, 0, 255));
+//       encoder.tick();
+//       newPos = encoder.getPosition();
+//       if(pos != newPos)
+//       {
+//         Serial.print("Motor status:");
+//         Serial.print(" Fast -> Medium ");
+//         Serial.print("|| RPM: ");
+//         Serial.print((int)(encoder.getRPM()));
+//         Serial.print("|| PWM: ");
+//         Serial.print(map(ac, 0, 100, 0, 255));
+//         Serial.print(" || ac: ");
+//         Serial.println(ac);
+//         pos = newPos;
+//       }      
+//       ac=ac-0.00139; 
+//     }
 
-        currentMillis = millis();
-        while (millis() - currentMillis <= 10000)
-        {
-            rotateMotor(true);
-        }
-        stopMotor();
-        delay(200);
-        while (millis() - currentMillis <= 20000)
-        {
-            rotateMotor(false);
-        }
-        while (millis() - currentMillis <= 30000)
-        {
-            rotateMotor(false);
-        }
-        stopMotor();
-        break;
+//     // velocidade média
+//     for (unsigned long start = millis(); millis() - start <= 120000;)
+//     {
+//         rotateMotor(true, map(70, 0, 100, 0, 255));
+//         encoder.tick();
+//         newPos = encoder.getPosition();
+//         if (pos != newPos)
+//         {
+//             Serial.print("Motor status:");
+//             Serial.print(" Moving ");
+//             Serial.print("|| RPM: ");
+//             Serial.print((int)(encoder.getRPM()));
+//             Serial.print(" || PWM: ");
+//             Serial.println(map(70, 0, 100, 0, 255));
+//             pos = newPos;
+//         }
+//     }
 
-    case 4: /*Seq 4*/
-        delay(1000);
+//     ac = 70; // desaceleração - check
+//     for(unsigned long start = millis(); millis() - start <= 10000;) // desaceleração por 10 segundos
+//     {
+//       rotateMotor(true, map(ac, 0, 100, 0, 255));
+//       encoder.tick();
+//       newPos = encoder.getPosition();
+//       if(pos != newPos)
+//       {
+//         Serial.print("Motor status:");
+//         Serial.print(" Medium -> Slow ");
+//         Serial.print("|| RPM: ");
+//         Serial.print((int)(encoder.getRPM()));
+//         Serial.print("|| PWM: ");
+//         Serial.print(map(ac, 0, 100, 0, 255));
+//         Serial.print(" || ac: ");
+//         Serial.println(ac);
+//         pos = newPos;
+//       }      
+//       ac=ac-0.0008; 
+//     }
 
-        currentMillis = millis();
-        while (millis() - currentMillis <= 20000)
-        {
-            rotateMotor(true);
-        }
-        stopMotor();
-        delay(10000);
-
-        currentMillis = millis();
-        while (millis() - currentMillis <= 20000)
-        {
-            rotateMotor(false);
-        }
-        while (millis() - currentMillis <= 20000)
-        {
-            rotateMotor(false);
-        }
-        stopMotor();
-        break;
-
-    default:
-        stopMotor();
-        break;
-    }
-}
+//     // velocidade lenta
+//     for (unsigned long start = millis(); millis() - start <= 120000;)
+//     {
+//         rotateMotor(true, map(40, 0, 100, 0, 255));
+//         encoder.tick();
+//         newPos = encoder.getPosition();
+//         if (pos != newPos)
+//         {
+//             Serial.print("Motor status:");
+//             Serial.print(" Moving ");
+//             Serial.print("|| RPM: ");
+//             Serial.print((int)(encoder.getRPM()));
+//             Serial.print(" || PWM: ");
+//             Serial.println(map(40, 0, 100, 0, 255));
+//             pos = newPos;
+//         }
+//     }
+// }

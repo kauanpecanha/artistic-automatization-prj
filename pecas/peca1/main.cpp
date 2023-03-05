@@ -1,82 +1,100 @@
-#include <Arduino.h> /* Just in case of using the vscode ide for arduino programming, not needed if using the commom arduino ide */
-#define RPWM 5
-#define LPWM 6
+// #include <Arduino.h> /* Just in case of using the vscode ide for arduino programming, not needed if using the commom arduino ide */
+// #include <RotaryEncoder.h>
+// #define PPR 29
+// #define RPWM 5
+// #define LPWM 6
 
-/*
-  Pins connected to aduino( in english )
+// /*
+//   Pins connected to aduino( in english )
 
-  IBT-2 pin 1 (RPWM) to Arduino pin 5(PWM)
-  IBT-2 pin 2 (LPWM) to Arduino pin 6(PWM)
-  IBT-2 pins 3 (R_EN), 4 (L_EN), 7 (VCC) to Arduino 5V
-  IBT-2 pin 8 (GND) to Arduino's GND
-  IBT-2 pins 5 (R_IS) and 6 (L_IS) not connected
-*/
+//   IBT-2 pin 1 (RPWM) to Arduino pin 5(PWM)
+//   IBT-2 pin 2 (LPWM) to Arduino pin 6(PWM)
+//   IBT-2 pins 3 (R_EN), 4 (L_EN), 7 (VCC) to Arduino 5V
+//   IBT-2 pin 8 (GND) to Arduino's GND
+//   IBT-2 pins 5 (R_IS) and 6 (L_IS) not connected
+// */
 
-// botões - buttons
-int b1 = 2;
-int b2 = 3;
+// // rotary encoder pins
+// const int pin1 = 2;
+// const int pin2 = 3;
 
-// variável da velocidade - velocity variables
-float vel = 0;
+// // bts7960 pins
+// const int L_EN = 7;
+// const int R_EN = 8;
+// const int L_PWM = 6;
+// const int R_PWM = 5;
 
-// sentido de rotação - sense of rotation 
-int state = 0;
+// // potentiometer pin
+// const int pot = A0;
+// float vel = 0;
 
-// pino central do potenciometro - potentiometer center pin
-int pot = A0;
+// RotaryEncoder encoder(pin1, pin2, RotaryEncoder::LatchMode::TWO03);
 
-// função que verifica o sentido de rotação - function that checks the sense of rotation
-void changeState()
-{
+// float tgtangle = 30;
+// float angle = 0;
 
-    if (digitalRead(b1) == LOW)
-    {
-        state = 0;
-    }
+// void moveTo(float now, float target)
+// {
+//   vel = (analogRead(pot) / 4);
+//   if (target > 0)
+//   {
+//     if (now <= target)
+//     {
+//       analogWrite(LPWM, 0);
+//       analogWrite(RPWM, vel);
+//     }
+//     else
+//     {
+//       analogWrite(RPWM, 0);
+//       analogWrite(LPWM, 0);
+//       delay(200);
+//       tgtangle = -30;
+//     }
+//   }
+//   else
+//   {
+//     if (now >= target)
+//     {
+//       analogWrite(RPWM, 0);
+//       analogWrite(LPWM, vel);
+//     }
+//     else
+//     {
+//       analogWrite(RPWM, 0);
+//       analogWrite(LPWM, 0);
+//       delay(200);
+//       tgtangle = 30;
+//     }
+//   }
+// }
 
-    if (digitalRead(b2) == LOW)
-    {
-        state = 1;
-    }
+// void getAngle()
+// {
+//   static int pos = 0;
+//   encoder.tick();
+//   int newPos = encoder.getPosition();
+//   if (pos != newPos)
+//   {
+//     angle = (float)newPos / PPR * 360;
+//     Serial.print("Desired angle: ");
+//     Serial.print(tgtangle);
+//     Serial.print(" || Actual angle: ");
+//     Serial.print(angle);
+//     Serial.print(" || Direction: ");
+//     Serial.print((int)(encoder.getDirection()));
+//     Serial.print(" || RPM: ");
+//     Serial.println((int)(encoder.getRPM()));
+//     pos = newPos;
+//   }
+// }
 
-}
+// void setup()
+// {
+//   Serial.begin(9600);
+// }
 
-// função para girar o motor na velocidade e sentidos desejados - function to rotate the motor at the desired speed and directions
-void rotateMotor()
-{
-    // leitura da velocidade pelo potenciometro - velocity reading by the potentiometer
-    vel = ((analogRead(pot))/4);
-
-    if (state == 0)
-    {
-        // gira para direita - rotate to the right
-        analogWrite(LPWM, 0);
-        analogWrite(RPWM, vel);
-    }
-
-    if (state == 1)
-    {
-        // gira para esquerda - rotate to the left
-        analogWrite(RPWM, 0);
-        analogWrite(LPWM, vel);
-    }
-
-}
-
-void setup()
-{
-
-    pinMode(RPWM, OUTPUT);
-    pinMode(LPWM, OUTPUT);
-    pinMode(b1, INPUT_PULLUP);
-    pinMode(b2, INPUT_PULLUP);
-
-}
-
-void loop()
-{
-
-    changeState();
-    rotateMotor();
-
-}
+// void loop()
+// {
+//   getAngle();
+//   moveTo(angle, tgtangle);
+// }
