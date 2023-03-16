@@ -1,8 +1,20 @@
-// #include <Arduino.h> /* Just in case of using the vscode ide for arduino programming, not needed if using the commom arduino ide */
-// #include <RotaryEncoder.h>
+// // ----------------------------------------------------------------------------------------------------------------------------------------
+
+//                                   /* English: Header includes and defines inherited from receiver code */
+//                                   /* Português-BR: Includes e Defines do cabeçalho, herdados do código do receptor */
+
+// #include <Arduino.h> /* Just in case of using PlatformIO vscode extension for arduino programming */
+// #include <IRremote.hpp>
+
+// #include<RotaryEncoder.h>
 // #define PPR 29
 // #define RPWM 5
 // #define LPWM 6
+
+// // ----------------------------------------------------------------------------------------------------------------------------------------
+
+//                                   /* English: Important info about the arduino connections, inherited from peca6 code */
+//                                   /* Portguês-BR: Informações importantes sobre as conexões no arduino, herdadas do código peca6 */
 
 // /*
 //   Pins connected to aduino( in english )
@@ -13,6 +25,11 @@
 //   IBT-2 pin 8 (GND) to Arduino's GND
 //   IBT-2 pins 5 (R_IS) and 6 (L_IS) not connected
 // */
+
+// // ----------------------------------------------------------------------------------------------------------------------------------------
+
+//                                   /* English: Settings of important data related to peca6 functions, inherited from peca6 code */
+//                                   /* Portguês-BR: Configurações de dados importantes relacionados às funções da peça 6, herdadas do código peca6 */
 
 // // rotary encoder pins
 // const int pin1 = 2;
@@ -35,17 +52,14 @@
 
 // static int pos = 0;
 
-// float returnAngle()
-// {
-//   pos = encoder.getPosition();
+// // ----------------------------------------------------------------------------------------------------------------------------------------
 
-//   angle = (float)pos/PPR * 360;
-
-//   return angle;
-// }
+//                                   /* English: Settings of the used functions in this process, inherited from peca6 code */
+//                                   /* Portguês-BR: Configurações das funções usadas neste processo, herdadas do código peca6 */
 
 // void printData()
 // {
+  
 //   encoder.tick();
 //   int newPos = encoder.getPosition();
 //   if (pos != newPos)
@@ -71,7 +85,7 @@
 //   {
 //     case 1: 
       
-//       delay(1000); // single second dealy
+//       delay(1000); // single second delay
 
 //       // maintain the motor stopped
 //       analogWrite(LPWM, 0);
@@ -127,33 +141,74 @@
 //   }
 // }
 
-
-
 // void firstSeq()
 // {
 //   moveTo(90, 0, 1);
 // }
 
-// void secondSeq()
+// void secondSeq()o
 // {
 //   moveTo(0, 180, 2);
 // }
 
 // void thirdSeq()
 // {
-//   moveTo((int)(encoder.getPosition()), 180, 3);
+//   moveTo(pos, 180, 3);
 // }
+
+// // ----------------------------------------------------------------------------------------------------------------------------------------
+
+//                                   /* English: Settings of important data related to the receiver functions, inherited from receiver code */
+//                                   /* Português-BR: Configuração de dados importantes relacionados às funções do receptor, herdadas do código do receptor */
+
+// const int IR = 9;
+// IRrecv IrReceiv(IR);
+// decode_results result;
+
+// const int code1 = 0xAA1;
+// const int code2 = 0xAA2;
+// const int code3 = 0xAA3;
+// const int code4 = 0xAA4;
+
+// // ----------------------------------------------------------------------------------------------------------------------------------------
+
+//                                   /* English: void setup and void loop functions */
+//                                   /* Português-BR: funções void setup e void loop */
+
 
 // void setup()
 // {
 //   Serial.begin(9600);
+//   pinMode(6, OUTPUT);
+//   pinMode(5, OUTPUT);
+//   IrReceiv.enableIRIn();
 // }
 
 // void loop()
 // {
-  
-//   firstSeq();
-//   secondSeq();
-//   thirdSeq();
+//   if (IrReceiv.decode(&result))
+//   {
+//     Serial.print(result.bits);
+//     Serial.print(": ");
+//     Serial.println(result.value, HEX);
 
+//     switch (result.value)
+//     {
+//       case code1:
+//         firstSeq();
+//         break;
+//       case code2:
+//         secondSeq();
+//         break;
+//       case code3:
+//         thirdSec();
+//         break;
+      
+//       default:
+//         Serial.println("ERROR");
+//         break;
+//     }
+//     IrReceiv.resume();
+//   }
+//   delay(1000);
 // }
