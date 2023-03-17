@@ -1,3 +1,5 @@
+// ------------------------------------------------------------------------------------
+// bibliotecas da peça 3 com receptor infravermelho
 #include <Arduino.h>
 #include <IRremote.hpp>
 
@@ -33,6 +35,9 @@
 #define FOREARM4_DIR 44
 #define FOREARM4_STP 45
 
+// ------------------------------------------------------------------------------------
+// constantes da peça 3 com infravermelho
+
 // Delay between steps
 const int delayTime = 200;
 
@@ -50,7 +55,9 @@ const int code2 = 0xAA2;
 const int code3 = 0xAA3;
 const int code4 = 0xAA4;
 const int code5 = 0xAA5;
-//
+
+// ------------------------------------------------------------------------------------
+// funções void setup e void loop
 
 void setup()
 {
@@ -91,7 +98,6 @@ void setup()
   digitalWrite(FOREARM2_EN, LOW);
   digitalWrite(FOREARM3_EN, LOW);
   digitalWrite(FOREARM4_EN, LOW);
-  //
 }
 
 void loop()
@@ -104,7 +110,9 @@ void loop()
 
     switch (result.value)
     {
+
     case code1:
+    
       digitalWrite(ARM1_DIR, 1);
       digitalWrite(ARM2_DIR, 1);
       digitalWrite(ARM3_DIR, 1);
@@ -123,8 +131,11 @@ void loop()
         delayMicroseconds(delayTime);
       }
       delay(100);
+
       break;
+
     case code2:
+
       digitalWrite(FOREARM1_DIR, 1);
       digitalWrite(FOREARM2_DIR, 1);
       digitalWrite(FOREARM3_STP, 1);
@@ -143,8 +154,11 @@ void loop()
         delayMicroseconds(delayTime);
       }
       delay(250);
+
       break;
+
     case code3:
+
       digitalWrite(FOREARM1_DIR, 0);
       digitalWrite(FOREARM2_DIR, 0);
       digitalWrite(FOREARM3_STP, 0);
@@ -163,8 +177,11 @@ void loop()
         delayMicroseconds(delayTime);
       }
       delay(100);
+
       break;
+
     case code4:
+
       digitalWrite(ARM1_DIR, 0);
       digitalWrite(ARM2_DIR, 0);
       digitalWrite(ARM3_STP, 0);
@@ -182,9 +199,13 @@ void loop()
         digitalWrite(ARM4_STP, LOW);
         delayMicroseconds(delayTime);
       }
+
       delay(1000);
+
       break;
+
     case code5:
+
       digitalWrite(ARM1_DIR, 1);
       digitalWrite(ARM2_DIR, 1);
       digitalWrite(ARM3_STP, 1);
@@ -202,6 +223,7 @@ void loop()
         digitalWrite(ARM4_STP, LOW);
         delayMicroseconds(delayTime);
       }
+
       break;
     
     default:
