@@ -1,6 +1,41 @@
-#include <Arduino.h> /* Just in case of using the vscode ide for arduino programming, not needed if using the commom arduino ide */
+// -----------------------------------------------------------------
+// bibliotecas da peça 4
+#include <Arduino.h>
+
 #define RPWM 5
 #define LPWM 6
+
+// -----------------------------------------------------------------
+// bibliotecas do receptor infravermelho
+#include <IRremote.hpp>
+
+// -----------------------------------------------------------------
+// variáveis do infravermelho
+const int IR = 9;
+IRrecv IrReceiv(IR);
+decode_results result;
+
+const int code1 = 0xAA1;
+const int code2 = 0xAA2;
+const int code3 = 0xAA3;
+const int code4 = 0xAA4;
+
+// -----------------------------------------------------------------
+// variáveis da peça 4
+
+// variável da velocidade - velocity variables
+float vel = 0;
+
+// pino central do potenciometro - potentiometer center pin
+int pot = A0;
+
+int sequencia = 0;
+
+long currentMillis;
+
+
+// -----------------------------------------------------------------
+// informações importantes sobre a peça 4
 
 /*
   Pins connected to aduino( in english )
@@ -12,15 +47,8 @@
   IBT-2 pins 5 (R_IS) and 6 (L_IS) not connected
 */
 
-// variável da velocidade - velocity variables
-float vel = 0;
-
-// pino central do potenciometro - potentiometer center pin
-int pot = A0;
-
-int sequencia = 0;
-
-long currentMillis;
+// -----------------------------------------------------------------
+// funções da peça 4
 
 void rotateMotor(bool b) /*  function to set the sense of rotation of the motor */
 {
@@ -48,19 +76,34 @@ void stopMotor() /*  function to stop the motor rotation  */
     analogWrite(RPWM, 0);
 }
 
+// -----------------------------------------------------------------
+// funções void setup e void loop
+
 void setup()
 {
-
-    pinMode(RPWM, OUTPUT);
-    pinMode(LPWM, OUTPUT);
+  Serial.begin(9600);
+  pinMode(6, OUTPUT);
+  pinMode(5, OUTPUT);
+  IrReceiv.enableIRIn();
+  pinMode(RPWM, OUTPUT);
+  pinMode(LPWM, OUTPUT);
 }
 
 void loop()
 {
+  if (IrReceiv.decode(&result))
+  {
+    Serial.print(result.bits);
+    Serial.print(": ");
+    Serial.println(result.value, HEX);
+//
     sequencia = random(1, 5);
     switch (sequencia)
+//
+    switch (result.value)
     {
-    case 1: /*Seq 1*/
+      case code1:
+
         delay(1000);
 
         currentMillis = millis();
@@ -77,9 +120,11 @@ void loop()
             rotateMotor(false);
         }
         stopMotor();
+        
         break;
 
-    case 2: /*Seq 2*/
+      case code2:
+        
         delay(1000);
 
         currentMillis = millis();
@@ -96,9 +141,11 @@ void loop()
             rotateMotor(true);
         }
         stopMotor();
+
         break;
 
-    case 3: /*Seq 3*/
+      case code3:
+        
         delay(1000);
 
         currentMillis = millis();
@@ -121,9 +168,11 @@ void loop()
             rotateMotor(false);
         }
         stopMotor();
+
         break;
 
-    case 4: /*Seq 4*/
+      case code4:
+        
         delay(1000);
 
         currentMillis = millis();
@@ -144,8 +193,15 @@ void loop()
         rotateMotor(true);
         break;
 
-    default:
+
+      default:
+
+        Serial.println("ERROR");
         stopMotor();
+        
         break;
     }
+    IrReceiv.resume();
+  }
+  delay(1000);
 }
