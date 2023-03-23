@@ -109,46 +109,26 @@
 
 //     case 3:
 
-//       // if-else structure to determine the direction of the motor rotation
-//       if( target > 0 )
+//        for(unsigned long start = millis(); millis() - start <= 10000;)
 //       {
-//         if( now <= target )
-//         {
-//           analogWrite(LPWM, 0);
-//           analogWrite(RPWM, vel);
-//         }
-//         else
-//         {
-//           analogWrite(RPWM, 0);
-//           analogWrite(LPWM, 0);
-//         }
+//         // perform the 90° counter-clockwise movement
+//         analogWrite(RPWM, vel);
+//         analogWrite(LPWM, 0);
+//         printData();
 //       }
-//       else
-//       {
-//         if( now >= target )
-//         {
-//           analogWrite(LPWM, 0);
-//           analogWrite(RPWM, vel);
-//         }
-//         else
-//         {
-//           analogWrite(RPWM, 0);
-//           analogWrite(LPWM, 0);
-//         }
-//       }
-      
+
 //       break;
 //   }
 // }
 
 // void firstSeq()
 // {
-//   moveTo(90, 0, 1);
+//   moveTo(0, 90, 2);
 // }
 
 // void secondSeq()o
 // {
-//   moveTo(0, 180, 2);
+//   moveTo(0, 180, 3);
 // }
 
 // void thirdSeq()
