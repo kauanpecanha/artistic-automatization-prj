@@ -12,17 +12,18 @@
 #define FOREARM1_STP 27
 
 // Rotary encoder pins
-#define DT_A1 = 2;
-#define CLK_A1 = 3;
-#define DT_FA1 = 4;
-#define CLK_FA1 = 5;
+#define DT_A1 2
+#define CLK_A1 3
+#define DT_FA1 4
+#define CLK_FA1 5
+
 RotaryEncoder encoder_A1(DT_A1, CLK_A1, RotaryEncoder::LatchMode::TWO03);
 RotaryEncoder encoder_FA1(DT_FA1, CLK_FA1, RotaryEncoder::LatchMode::TWO03);
 
 void getPosition_A1()
 {
     static int pos = 0;
-    encoder.tick();
+    encoder_A1.tick();
     int newPos = encoder_A1.getPosition();
     if (pos != newPos)
     {
@@ -32,10 +33,11 @@ void getPosition_A1()
     Serial.print(pos);
     Serial.print(" |");
 }
+
 void getPosition_FA1()
 {
     static int pos = 0;
-    encoder.tick();
+    encoder_FA1.tick();
     int newPos = encoder_FA1.getPosition();
     if (pos != newPos)
     {
@@ -46,6 +48,10 @@ void getPosition_FA1()
     Serial.print(" |");
 }
 
+void setup()
+{
+  
+}
 void loop()
 {
     getPosition_A1();
