@@ -1,5 +1,3 @@
-// ------------------------------------------------------------------------------------
-// bibliotecas da peça 3 com receptor infravermelho
 #include <Arduino.h>
 #include <RotaryEncoder.h>
 #include <IRremote.hpp>
@@ -42,42 +40,42 @@
 const int delayTime = 200;
 
 // Resolution relation
-const int RELATION_ARM = 10;
-const int RELATION_FOREARM = 10;
+const float RELATION_ARM = 19.1;
+const float RELATION_FOREARM = 11.35;
 
 // Rotary encoder pins
-#define DT_A1 = 2;
-#define CLK_A1 = 3;
-#define DT_FA1 = 4;
-#define CLK_FA1 = 5;
+#define DT_A1 2
+#define CLK_A1 3
+#define DT_FA1 4
+#define CLK_FA1 5
 RotaryEncoder encoder_A1(DT_A1, CLK_A1, RotaryEncoder::LatchMode::TWO03);
 RotaryEncoder encoder_FA1(DT_FA1, CLK_FA1, RotaryEncoder::LatchMode::TWO03);
 
-#define DT_A2 = 6;
-#define CLK_A2 = 7;
-#define DT_FA2 = 8;
-#define CLK_FA2 = 9;
+#define DT_A2 6
+#define CLK_A2 7
+#define DT_FA2 8
+#define CLK_FA2 9
 RotaryEncoder encoder_A2(DT_A2, CLK_A2, RotaryEncoder::LatchMode::TWO03);
 RotaryEncoder encoder_FA2(DT_FA2, CLK_FA2, RotaryEncoder::LatchMode::TWO03);
 
-#define DT_A3 = 10;
-#define CLK_A3 = 11;
-#define DT_FA3 = 12;
-#define CLK_FA3 = 13;
+#define DT_A3 10
+#define CLK_A3 11
+#define DT_FA3 12
+#define CLK_FA3 13
 RotaryEncoder encoder_A3(DT_A3, CLK_A3, RotaryEncoder::LatchMode::TWO03);
 RotaryEncoder encoder_FA3(DT_FA3, CLK_FA3, RotaryEncoder::LatchMode::TWO03);
 
-#define DT_A4 = 14;
-#define CLK_A4 = 15;
-#define DT_FA4 = 16;
-#define CLK_FA4 = 17;
+#define DT_A4 14
+#define CLK_A4 15
+#define DT_FA4 16
+#define CLK_FA4 17
 RotaryEncoder encoder_A4(DT_A4, CLK_A4, RotaryEncoder::LatchMode::TWO03);
 RotaryEncoder encoder_FA4(DT_A4, CLK_FA4, RotaryEncoder::LatchMode::TWO03);
 
 void getPosition_A1()
 {
   static int pos = 0;
-  encoder.tick();
+  encoder_A1.tick();
   int newPos = encoder_A1.getPosition();
   if (pos != newPos)
   {
@@ -90,7 +88,7 @@ void getPosition_A1()
 void getPosition_FA1()
 {
   static int pos = 0;
-  encoder.tick();
+  encoder_FA1.tick();
   int newPos = encoder_FA1.getPosition();
   if (pos != newPos)
   {
@@ -104,7 +102,7 @@ void getPosition_FA1()
 void getPosition_A2()
 {
   static int pos = 0;
-  encoder.tick();
+  encoder_A2.tick();
   int newPos = encoder_A2.getPosition();
   if (pos != newPos)
   {
@@ -117,7 +115,7 @@ void getPosition_A2()
 void getPosition_FA2()
 {
   static int pos = 0;
-  encoder.tick();
+  encoder_FA2.tick();
   int newPos = encoder_FA2.getPosition();
   if (pos != newPos)
   {
@@ -131,7 +129,7 @@ void getPosition_FA2()
 void getPosition_A3()
 {
   static int pos = 0;
-  encoder.tick();
+  encoder_A3.tick();
   int newPos = encoder_A3.getPosition();
   if (pos != newPos)
   {
@@ -144,7 +142,7 @@ void getPosition_A3()
 void getPosition_FA3()
 {
   static int pos = 0;
-  encoder.tick();
+  encoder_FA3.tick();
   int newPos = encoder_FA3.getPosition();
   if (pos != newPos)
   {
@@ -158,7 +156,7 @@ void getPosition_FA3()
 void getPosition_A4()
 {
   static int pos = 0;
-  encoder.tick();
+  encoder_A4.tick();
   int newPos = encoder_A4.getPosition();
   if (pos != newPos)
   {
@@ -171,7 +169,7 @@ void getPosition_A4()
 void getPosition_FA4()
 {
   static int pos = 0;
-  encoder.tick();
+  encoder_FA4.tick();
   int newPos = encoder_FA4.getPosition();
   if (pos != newPos)
   {
@@ -232,7 +230,7 @@ void loop()
   getPosition_A4();
   getPosition_FA4();
   Serial.println();
-  
+
   digitalWrite(ARM1_DIR, 1);
   digitalWrite(ARM2_DIR, 1);
   digitalWrite(ARM3_DIR, 1);
