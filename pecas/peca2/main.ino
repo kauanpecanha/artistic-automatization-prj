@@ -1,37 +1,34 @@
-// ------------------------------------------------------------------------
-// bibliotecas da peça 2 com receptor infravermelho
 #include <Arduino.h>
-#include <IRremote.hpp>
-#include <Arduino.h> /* Just in case of using the vscode ide for arduino programming, not needed if using the commom arduino ide */
-#include <Servo.h>   /* Library to the servo motor  */
+#include <IRremote.hpp> // Library for the IR receive
+#include <Servo.h>   // Library for the servo motor  
 
+// parameters used on movement
 #define FPS 24
 #define FRAMES 250
 #define PWM_PIN 3
 
-// pinos RPWM e LPWM da ponte ibt2 - ibt2's RPWM and LPWM pins
+// ibt2's RPWM and LPWM pins
 #define RPWM 5
 #define LPWM 6
 
-// ------------------------------------------------------------------------
-// variáveis da peça 2 com receptor infravermelho
-
-// variavel de velocidade - variable velocity
+// variable velocity
 float vel = 0;
 
-// potenciometro - potentiometer
+// potentiometer
 int pot = A0;
 
+// IR receive parameters
 const int IR = 9;
 IRrecv IrReceiv(IR);
 decode_results result;
 
-const int code1 = 0xAA1;
-const int code2 = 0xAA2;
-const int code3 = 0xAA3;
-const int code4 = 0xAA4;
+// IR codes
+const int codeON = 0xAA1;
+const int code1 = 0xAA2;
+const int code2 = 0xAA3;
+const int codeOFF = 0xAA4;
 
-//
+// angle of the movement
 const float Bone[250] PROGMEM = {
     90.0,
     90.0,
@@ -284,53 +281,29 @@ const float Bone[250] PROGMEM = {
     89.303,
     89.821,
 }; /*  vector of positions inherited from blender  */
-//
 
-//
-const float frameDurationMillis = 1000 / FPS;                       /*  duração de um único frame - single frame duration  */
-const float animationDurationMillis = FRAMES * frameDurationMillis; /*  duração total da animação - total duration of the animation */
-long startMillis = millis();                                        /*  frame inicial do arduíno - initial frame  */
+
+
+const float frameDurationMillis = 1000 / FPS;                       /* single frame duration  */
+const float animationDurationMillis = FRAMES * frameDurationMillis; /* total duration of the animation */
+long startMillis = millis();                                        /* initial frame  */
 
 Servo myservo; /*  declaration of the object myservo of the type servo */
 
-// ------------------------------------------------------------------------
-// informações da peça 2 com receptor infravermelho
-
-/*
-  Servo Position value Animation
-
-  FPS: 24
-  Frames: 250
-  Armature: Armature
-
-//
-
-  Pins connected to aduino( in english )
-
-  IBT-2 pin 1 (RPWM) to Arduino pin 5(PWM)
-  IBT-2 pin 2 (LPWM) to Arduino pin 6(PWM)
-  IBT-2 pins 3 (R_EN), 4 (L_EN), 7 (VCC) to Arduino 5V
-  IBT-2 pin 8 (GND) to Arduino's GND
-  IBT-2 pins 5 (R_IS) and 6 (L_IS) not connected
-*/
-
-// ------------------------------------------------------------------------
-// funções da peça 2 com receptor infravermelho
-
 void rotateMotor(bool b) /*  function to set the sense of rotation of the motor */
 {
-    // leitura da velocidade pelo potenciometro - velocity reading by the potentiometer
+    // velocity reading by the potentiometer
     vel = ((analogRead(pot)) / 4);
 
     if (b == true)
     {
-        // gira para direita - rotate to the right
+        // rotate to the right
         analogWrite(LPWM, 0);
         analogWrite(RPWM, vel);
     }
     else
     {
-        // gira para esquerda - rotate to the left
+        // rotate to the left
         analogWrite(RPWM, 0);
         analogWrite(LPWM, vel);
     }
@@ -338,14 +311,10 @@ void rotateMotor(bool b) /*  function to set the sense of rotation of the motor 
 
 void stopMotor() /*  function to stop the motor rotation  */
 {
-    // para o motor - stop the motor
+    // stop the motor
     analogWrite(LPWM, 0);
     analogWrite(RPWM, 0);
 }
-
-
-// ------------------------------------------------------------------------
-// funções void setup e void loop
 
 void setup()
 {
@@ -365,11 +334,11 @@ void loop()
         Serial.print(result.bits);
         Serial.print(": ");
         Serial.println(result.value, HEX);
-
-        switch (result.value)
+        IrReceiv.resume();
+        }
+    switch (result.value)
         {
-        case code1:
-        {
+        case codeON:
             long currentMillis = millis();                     /*   milissegundo do momento atual  - milisseconds of the current moment */
             long positionMillis = currentMillis - startMillis; /*   milissegundo do arduíno naquele momento - exact milissecond since the beggining of the programm */
 
@@ -412,15 +381,12 @@ void loop()
                 {
                     stopMotor();
                 }
-                break;
-
-            default:
-                Serial.println("ERROR");
-                break;
             }
-            IrReceiv.resume();
+            break;
+        case codeOFF:
+            stopMotor();
+        default:
+            Serial.println("ERROR");
+            break;
         }
-            delay(1000);
-        }
-    }
 }
