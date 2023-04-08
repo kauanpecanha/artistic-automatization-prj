@@ -1,12 +1,13 @@
 #include <Arduino.h> /* Just in case of using the vscode ide for arduino programming, not needed if using the commom arduino ide */
-#include <RotaryEncoder.h>
-#include <IRremote.hpp>
-#define PPR 29
+#include <RotaryEncoder.h> // Library to use the rotary encoder KY-040
+#include <IRremote.hpp> // Library to receive IR signals
+
+#define PPR 29 // Constant for the rotary encoder angle
 #define RPWM 5
 #define LPWM 6
 
 /*
-  Pins connected to aduino( in english )
+  Pins connected to aduino
 
   IBT-2 pin 1 (RPWM) to Arduino pin 5(PWM)
   IBT-2 pin 2 (LPWM) to Arduino pin 6(PWM)
@@ -20,26 +21,27 @@ const int pin1 = 2;
 const int pin2 = 3;
 RotaryEncoder encoder(pin1, pin2, RotaryEncoder::LatchMode::TWO03);
 
-// potentiometer pin
+// potentiometer pin (velocity control)
 const int pot = A0;
 float vel = 0;
 
+// angle variables
 float tgtangle = 30;
 float angle = 0;
 
-// IR receiver
+// IR receiver parameters
 const int IR = 9;
 IRrecv IrReceiv(IR);
 decode_results result;
 
 // ON/OFF codes
-const int code1 = 0xAA1; // on
-const int code2 = 0xAA2; // off
+const int codeON = 0xAA1; // on
+const int codeOFF = 0xAA4; // off
 
+// function in use to move the sculpture 30 degrees / -30 degrees 
 void moveTo(float now, float target)
 {
-  // vel = (analogRead(pot) / 4);
-  vel = 100;
+  vel = (analogRead(pot) / 4);
   if (target > 0)
   {
     if (now <= target)
@@ -72,12 +74,14 @@ void moveTo(float now, float target)
   }
 }
 
+// function in use to stop the sculpture
 void stopMottor()
 {
   analogWrite(RPWM, 0);
   analogWrite(LPWM, 0);
 }
 
+// function that obtain the angle at the moment
 void getAngle()
 {
   static int pos = 0;
@@ -105,21 +109,21 @@ void setup()
 
 void loop()
 {
-  if (IrReceiv.decode(&result))
+  if (IrReceiv.decode(&result)) // If any signal are detected
   {
     Serial.print(result.bits);
     Serial.print(": ");
     Serial.println(result.value, HEX);
     IrReceiv.resume();
   }
-  switch (result.value)
+  switch (result.value) // Stop or Move the sculpture according to the IR code
   {
-  case code1:
+  case codeON:
     getAngle();
     Serial.println("Move");
     moveTo(angle, tgtangle);
     break;
-  case code2:
+  case codeOFF:
     Serial.println("Stop");
     stopMottor();
     break;
