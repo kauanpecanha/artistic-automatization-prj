@@ -1,17 +1,19 @@
+/* Code for IR TRansmitter, to be used on Arduino Nano */
+
 #include <Arduino.h>
-#include <IRremote.hpp>
+#include <IRremote.hpp> // Library for InfraRed Transmitter 
 
+// IR sentences
 IRsend IrSend;
-const int IR = 9;
+const int IR = 9; // pin connected
 
-int code1 = 0xAA1;
-int code2 = 0xAA2;
-int code3 = 0xAA3;
-int code4 = 0xAA4;
+// Codes for every sequence
+int codeON = 0xAA1;
+//int code1 = 0xAA2;
+//int code2 = 0xAA3;
+//int codeOFF = 0xAA4;
 
 int nBits = 12;
-
-int seq;
 
 void setup()
 {
@@ -21,27 +23,9 @@ void setup()
 
 void loop()
 {
-  if (Serial.available() > 0)
-  {
-    seq = Serial.parseInt();
-  }
-  Serial.print(seq);
-  switch (seq)
-  {
-  case 1:
-    IrSend.sendSony(code1, nBits);
-    break;
-  case 2:
-    IrSend.sendSony(code2, nBits);
-    break;
-  case 3:
-    IrSend.sendSony(code3, nBits);
-    break;
-  case 4:
-    IrSend.sendSony(code4, nBits);
-    break;
-  default:
-    break;
-  }
-  delay(300);
+  IrSend.sendSony(codeON, nBits); // Signal transmission
+  //IrSend.sendSony(code1, nBits);
+  //IrSend.sendSony(code2, nBits);
+  //IrSend.sendSony(codeOFF, nBits);
+  delay(300); // Delay between transmission
 }
