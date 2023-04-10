@@ -306,6 +306,7 @@ void rotateMotor(bool b) /*  function to set the rotation sense of the motor */
         analogWrite(RPWM, 0);
         analogWrite(LPWM, vel);
     }
+    
 }
 
 void stopMotor() /*  function to stop the motor rotation  */
