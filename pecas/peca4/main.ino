@@ -1,42 +1,34 @@
-// -----------------------------------------------------------------
-// bibliotecas da peça 4
-#include <Arduino.h>
+#include <Arduino.h> /* Just in case of using the vscode ide for arduino programming, not needed if using the commom arduino ide */
+#include <IRremote.hpp> // library for the IR receiver
 
+// RPWM and LPWM pins setting
 #define RPWM 5
 #define LPWM 6
 
-// -----------------------------------------------------------------
-// bibliotecas do receptor infravermelho
-#include <IRremote.hpp>
-
-// -----------------------------------------------------------------
-// variáveis do infravermelho
+// IR receive parameters
 const int IR = 9;
 IRrecv IrReceiv(IR);
 decode_results result;
 
-const int code1 = 0xAA1;
-const int code2 = 0xAA2;
-const int code3 = 0xAA3;
-const int code4 = 0xAA4;
+// IR codes
+const int codeON = 0xAA1;
+const int code1 = 0xAA2;
+const int code2 = 0xAA3;
+const int codeOFF = 0xAA4;
 
-// -----------------------------------------------------------------
-// variáveis da peça 4
-
-// variável da velocidade - velocity variables
+// velocity variable
 float vel = 0;
 
-// pino central do potenciometro - potentiometer center pin
+// potentiometer center pin
 int pot = A0;
 
 int sequencia = 0;
 
+// variable to get the beggining millisecond of a movement
 long currentMillis;
 
 
-// -----------------------------------------------------------------
-// informações importantes sobre a peça 4
-
+// important information about the fourth sculpture
 /*
   Pins connected to aduino( in english )
 
@@ -47,23 +39,21 @@ long currentMillis;
   IBT-2 pins 5 (R_IS) and 6 (L_IS) not connected
 */
 
-// -----------------------------------------------------------------
-// funções da peça 4
 
-void rotateMotor(bool b) /*  function to set the sense of rotation of the motor */
+void rotateMotor(bool b) /*  function to set the rotation sense of the motor */
 {
-    // leitura da velocidade pelo potenciometro - velocity reading by the potentiometer
+    // velocity reading by the potentiometer
     vel = ((analogRead(pot)) / 4);
 
     if (b == true)
     {
-        // gira para direita - rotate to the right
+        // rotate to the right
         analogWrite(LPWM, 0);
         analogWrite(RPWM, vel);
     }
     else
     {
-        // gira para esquerda - rotate to the left
+        // rotate to the left
         analogWrite(RPWM, 0);
         analogWrite(LPWM, vel);
     }
@@ -71,16 +61,15 @@ void rotateMotor(bool b) /*  function to set the sense of rotation of the motor 
 
 void stopMotor() /*  function to stop the motor rotation  */
 {
-    // para o motor - stop the motor
+    // stop the motor
     analogWrite(LPWM, 0);
     analogWrite(RPWM, 0);
 }
 
-// -----------------------------------------------------------------
-// funções void setup e void loop
 
 void setup()
 {
+  // fourth sculpture settings
   Serial.begin(9600);
   pinMode(6, OUTPUT);
   pinMode(5, OUTPUT);
@@ -96,44 +85,59 @@ void loop()
     Serial.print(result.bits);
     Serial.print(": ");
     Serial.println(result.value, HEX);
-//
+
     sequencia = random(1, 5);
     switch (sequencia)
-//
+
     switch (result.value)
     {
-      case code1:
+      
+      case codeON:
 
-        delay(1000);
+        delay(1000); // a second delay
 
-        currentMillis = millis();
-        while (millis() - currentMillis <= 10000)
+        currentMillis = millis(); // getting the beggining millissecond of this sequence
+        while (millis() - currentMillis <= 10000)  // left rotation for 10 seconds
         {
-            rotateMotor(false);
-        }
-        stopMotor();
-        delay(10000);
+            
+            rotateMotor(false); // left rotation command
 
-        currentMillis = millis();
-        while (millis() - currentMillis <= 40000)
-        {
-            rotateMotor(false);
         }
-        stopMotor();
+        
+        stopMotor(); // function to stop motor movement
+
+        delay(10000); // 10 seconds delay
+
+        currentMillis = millis(); // getting the beggining millissecond of this sequence
+        while (millis() - currentMillis <= 40000) // left rotation for 40 seconds
+        {
+            
+            rotateMotor(false); // left rotation command
+
+        }
+
+        stopMotor(); // function to stop motor movement
         
         break;
 
-      case code2:
+      case code1:
         
-        delay(1000);
+        delay(1000); // a second delay
 
-        currentMillis = millis();
-        while (millis() - currentMillis <= 10000)
+        currentMillis = millis(); // getting the beggining millissecond of this sequence
+
+        while (millis() - currentMillis <= 10000) // right rotation for 10 seconds
         {
-            rotateMotor(true);
+            
+            rotateMotor(true); // right rotation command
+
         }
-        stopMotor();
-        delay(5000);
+        
+        stopMotor(); // function to stop motor movement
+
+        delay(5000); // five seconds delay
+
+        // same variables and functions ideas are repeated on the code bellow
 
         currentMillis = millis();
         while (millis() - currentMillis <= 45000)
@@ -144,7 +148,7 @@ void loop()
 
         break;
 
-      case code3:
+      case code2:
         
         delay(1000);
 
@@ -171,7 +175,7 @@ void loop()
 
         break;
 
-      case code4:
+      case codeOFF:
         
         delay(1000);
 
@@ -201,7 +205,11 @@ void loop()
         
         break;
     }
+    
     IrReceiv.resume();
+
   }
-  delay(1000);
+  
+  delay(1000); // a second delay
+
 }

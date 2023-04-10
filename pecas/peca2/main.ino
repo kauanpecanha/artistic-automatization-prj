@@ -1,5 +1,5 @@
 #include <Arduino.h>    /* Just in case of using the vscode ide for arduino programming, not needed if using the commom arduino ide */
-#include <IRremote.hpp> // Library for the IR receive
+#include <IRremote.hpp> // Library for the IR receiver
 #include <Servo.h>      // Library for the servo motor
 
 // parameters used on movement
@@ -332,7 +332,7 @@ void setup()
 void loop()
 {
 
-    if (IrReceiv.decode(&result)) // data printing
+    if (IrReceiv.decode(&result))
     {
 
         Serial.print(result.bits);
