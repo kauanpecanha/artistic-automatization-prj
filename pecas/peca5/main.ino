@@ -1,20 +1,13 @@
-// --------------------------------------------------------------------------------------------
-// bibliotecas do código do receptor
+#include <Arduino.h> /* Just in case of using the vscode ide for arduino programming, not needed if using the commom arduino ide */
+#include <IRremote.hpp> // Library for the IR receiver
+#include <RotaryEncoder.h> // Library for encoder using
 
-#include <Arduino.h>
-#include <IRremote.hpp>
-
-// --------------------------------------------------------------------------------------------
-// bibliotecas do código da peca5
-
-#include <RotaryEncoder.h>
-
+// ibt2's RPWM and LPWM pins
 #define RPWM 5
 #define LPWM 6
 
-// --------------------------------------------------------------------------------------------
-// informações importantes da peca5
 
+// important information about the fifth sculpture setting
 /*
   Pins connected to aduino( in english )
 
@@ -25,21 +18,25 @@
   IBT-2 pins 5 (R_IS) and 6 (L_IS) not connected
 */
 
-// --------------------------------------------------------------------------------------------
-// variáveis importantes do receptor
+/*
+  IMPORTANT WARNING
+  
+  In case of changing the speed of the movements, the acceleration must be changed the same way, manually, according to what's desired, just like the decimal numbers increased or decreased to the ac variable at the final of acceleration or deceleration iterations. 
+  It must be done within attempts of values, always checking the serial monitor to check if the decimal number is enough to what is desired, in order to look for smooth transitions beetween the sequences. 
+*/
 
+// IR receive parameters
 const int IR = 9;
 IRrecv IrReceiv(IR);
 decode_results result;
 
-const int code1 = 0xAA1;
-const int code2 = 0xAA2;
-const int code3 = 0xAA3;
-const int code4 = 0xAA4;
-const int code5 = 0xAA5;
+// IR codes
+const int codeON = 0xAA1;
+const int code1 = 0xAA2;
+const int code2 = 0xAA3;
+const int code3 = 0xAA4;
+const int codeOFF = 0xAA5;
 
-// --------------------------------------------------------------------------------------------
-// variáveis da peca5
 
 // rotary encoder pins
 const int pin1 = 2;
@@ -47,20 +44,18 @@ const int pin2 = 3;
 
 RotaryEncoder encoder(pin1, pin2, RotaryEncoder::LatchMode::TWO03);
 
-// --------------------------------------------------------------------------------------------
-// funções da peca5
 
-void rotateMotor(bool b, int vel) /*  function to set the sense of rotation of the motor */
+void rotateMotor(bool b, int vel) /*  function to set the rotation sense of the motor */
 {
   if (b == true)
   {
-    // gira para direita - rotate to the right
+    // rotate to the right
     analogWrite(LPWM, 0);
     analogWrite(RPWM, vel);
   }
   else
   {
-    // gira para esquerda - rotate to the left
+    // rotate to the left
     analogWrite(RPWM, 0);
     analogWrite(LPWM, vel);
   }
@@ -68,13 +63,10 @@ void rotateMotor(bool b, int vel) /*  function to set the sense of rotation of t
 
 void stopMotor() /*  function to stop the motor rotation  */
 {
-  // para o motor - stop the motor
+  // stop the motor
   analogWrite(LPWM, 0);
   analogWrite(RPWM, 0);
 }
-
-// --------------------------------------------------------------------------------------------
-// funções void setup e void loop
 
 void setup()
 {
@@ -87,9 +79,9 @@ void setup()
 void loop()
 {
 
-  static int pos = 0;
-  int newPos;
-  float ac = 0;
+  static int pos = 0; // variable to store the beggining location of the movement
+  int newPos; // variable to store the position at that momento of the movement
+  float ac = 0; // variable for acceleration control
 
   if (IrReceiv.decode(&result))
   {
@@ -100,9 +92,9 @@ void loop()
     switch (result.value)
     {
 
-    case code1: // check
+    case codeON: 
 
-      //  parado
+      //  stopped
       for (unsigned long start = millis(); millis() - start <= 20000;)
       {
         stopMotor();
@@ -113,8 +105,8 @@ void loop()
       }
 
       ac = 0;
-      // aceleração - check
-      for (unsigned long start = millis(); millis() - start <= 10000;) // aceleração por 10 segundos
+      // acceleration
+      for (unsigned long start = millis(); millis() - start <= 10000;) // 10 seconds long acceleration
       {
         rotateMotor(true, map(ac, 0, 100, 0, 255));
         encoder.tick();
@@ -131,14 +123,14 @@ void loop()
           Serial.println(ac);
           pos = newPos;
         }
-        ac = ac + 0.00047;
+        ac = ac + 0.00047; // acceleration increasing
       }
 
       break;
 
-    case code2: // check
+    case code1: 
 
-      // velocidade lenta
+      // slow speed
       for (unsigned long start = millis(); millis() - start <= 110000;)
       {
         rotateMotor(true, map(40, 0, 100, 0, 255));
@@ -156,8 +148,9 @@ void loop()
         }
       }
 
-      ac = 40;                                                         // aceleração - check
-      for (unsigned long start = millis(); millis() - start <= 10000;) // aceleração por 10 segundos
+      ac = 40;                                                         
+      // acceleration
+      for (unsigned long start = millis(); millis() - start <= 10000;) // 10 seconds long acceleration
       {
         rotateMotor(true, map(ac, 0, 100, 0, 255));
         encoder.tick();
@@ -174,14 +167,14 @@ void loop()
           Serial.println(ac);
           pos = newPos;
         }
-        ac = ac + 0.0008;
+        ac = ac + 0.0008; // acceleration increasing
       }
 
       break;
 
-    case code3: // check
+    case code2:
 
-      // velocidade média
+      // medium speed
       for (unsigned long start = millis(); millis() - start <= 110000;)
       {
         rotateMotor(true, map(70, 0, 100, 0, 255));
@@ -199,8 +192,9 @@ void loop()
         }
       }
 
-      ac = 70;                                                         // aceleração - check
-      for (unsigned long start = millis(); millis() - start <= 10000;) // aceleração por 10 segundos
+      ac = 70;
+      // acceleration
+      for (unsigned long start = millis(); millis() - start <= 10000;) // 10 seconds long acceleration
       {
         rotateMotor(true, map(ac, 0, 100, 0, 255));
         encoder.tick();
@@ -217,14 +211,14 @@ void loop()
           Serial.println(ac);
           pos = newPos;
         }
-        ac = ac + 0.00135;
+        ac = ac + 0.00135; // acceleration increasing
       }
 
       break;
 
-    case code4: // check
+    case code3:
 
-      // velocidade rápida
+      // fast speed
       for (unsigned long start = millis(); millis() - start <= 110000;)
       {
         rotateMotor(true, map(100, 0, 100, 0, 255));
@@ -242,8 +236,9 @@ void loop()
         }
       }
 
-      ac = 100;                                                        // desaceleração - check
-      for (unsigned long start = millis(); millis() - start <= 10000;) // desaceleração por 10 segundos
+      ac = 100;
+      // deceleration
+      for (unsigned long start = millis(); millis() - start <= 10000;) // 10 seconds long deceleration
       {
         rotateMotor(true, map(ac, 0, 100, 0, 255));
         encoder.tick();
@@ -260,12 +255,12 @@ void loop()
           Serial.println(ac);
           pos = newPos;
         }
-        ac = ac - 0.00139;
+        ac = ac - 0.00139; // acceleration decreasing
       }
 
       break;
 
-    case code5:
+    case codeOFF:
 
       // velocidade média
       for (unsigned long start = millis(); millis() - start <= 120000;)
@@ -285,8 +280,9 @@ void loop()
         }
       }
 
-      ac = 70;                                                         // desaceleração - check
-      for (unsigned long start = millis(); millis() - start <= 10000;) // desaceleração por 10 segundos
+      ac = 70;
+      // deceleration
+      for (unsigned long start = millis(); millis() - start <= 10000;) // 10 seconds long deceleration
       {
         rotateMotor(true, map(ac, 0, 100, 0, 255));
         encoder.tick();
@@ -303,10 +299,10 @@ void loop()
           Serial.println(ac);
           pos = newPos;
         }
-        ac = ac - 0.0008;
+        ac = ac - 0.0008; // acceleration decreasing
       }
 
-      // velocidade lenta
+      // slow speed
       for (unsigned long start = millis(); millis() - start <= 120000;)
       {
         rotateMotor(true, map(40, 0, 100, 0, 255));
