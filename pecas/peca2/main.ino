@@ -1,6 +1,6 @@
-#include <Arduino.h>
+#include <Arduino.h>    /* Just in case of using the vscode ide for arduino programming, not needed if using the commom arduino ide */
 #include <IRremote.hpp> // Library for the IR receive
-#include <Servo.h>   // Library for the servo motor  
+#include <Servo.h>      // Library for the servo motor
 
 // parameters used on movement
 #define FPS 24
@@ -282,18 +282,17 @@ const float Bone[250] PROGMEM = {
     89.821,
 }; /*  vector of positions inherited from blender  */
 
-
-
 const float frameDurationMillis = 1000 / FPS;                       /* single frame duration  */
 const float animationDurationMillis = FRAMES * frameDurationMillis; /* total duration of the animation */
 long startMillis = millis();                                        /* initial frame  */
 
-Servo myservo; /*  declaration of the object myservo of the type servo */
+Servo myservo; /*  declaration of the object myservo of the type servo  */
 
-void rotateMotor(bool b) /*  function to set the sense of rotation of the motor */
+void rotateMotor(bool b) /*  function to set the rotation sense of the motor */
 {
+
     // velocity reading by the potentiometer
-    vel = ((analogRead(pot)) / 4);
+    vel = ((analogRead(pot)) / 4); // velocity set by the potentiometer
 
     if (b == true)
     {
@@ -311,6 +310,7 @@ void rotateMotor(bool b) /*  function to set the sense of rotation of the motor 
 
 void stopMotor() /*  function to stop the motor rotation  */
 {
+
     // stop the motor
     analogWrite(LPWM, 0);
     analogWrite(RPWM, 0);
@@ -318,6 +318,7 @@ void stopMotor() /*  function to stop the motor rotation  */
 
 void setup()
 {
+
     Serial.begin(9600);
     pinMode(6, OUTPUT);
     pinMode(5, OUTPUT);
@@ -329,25 +330,32 @@ void setup()
 
 void loop()
 {
-    if (IrReceiv.decode(&result))
+
+    if (IrReceiv.decode(&result)) // data printing
     {
+
         Serial.print(result.bits);
         Serial.print(": ");
         Serial.println(result.value, HEX);
         IrReceiv.resume();
-        }
+    }
+
     switch (result.value)
-        {
+    {
         case codeON:
-            long currentMillis = millis();                     /*   milissegundo do momento atual  - milisseconds of the current moment */
-            long positionMillis = currentMillis - startMillis; /*   milissegundo do arduíno naquele momento - exact milissecond since the beggining of the programm */
+            
+            long currentMillis = millis();                     /*   milisseconds of the current moment */
+            long positionMillis = currentMillis - startMillis; /*   exact milissecond since the beggining of the programm */
 
             if (positionMillis >= animationDurationMillis)
             {
+                
                 startMillis = currentMillis;
+
             }
             else
             {
+                
                 long frame = floor(positionMillis / frameDurationMillis);
                 float positionValue = pgm_read_float_near(Bone + frame);
 
@@ -355,38 +363,56 @@ void loop()
 
                 if (positionMillis >= 25 && positionMillis <= 45)
                 {
+                    
                     rotateMotor(true);
+
                 }
 
                 else if (positionMillis >= 52 && positionMillis <= 71)
                 {
+                    
                     rotateMotor(false);
+
                 }
 
                 else if (positionMillis >= 90 && positionMillis <= 135)
                 {
+                    
                     rotateMotor(true);
+
                 }
 
                 else if (positionMillis >= 156 && positionMillis <= 181)
                 {
+                    
                     rotateMotor(false);
+
                 }
 
                 else if (positionMillis >= 182 && positionMillis <= 238)
                 {
+                    
                     rotateMotor(true);
+
                 }
                 else
                 {
+                    
                     stopMotor();
+
                 }
             }
+            
             break;
+
         case codeOFF:
+            
             stopMotor();
+
         default:
+            
             Serial.println("ERROR");
             break;
-        }
+
+    }
 }
