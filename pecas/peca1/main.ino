@@ -41,37 +41,51 @@ const int codeOFF = 0xAA4; // off
 // function in use to move the sculpture 30 degrees / -30 degrees 
 void moveTo(float now, float target)
 {
-  vel = (analogRead(pot) / 4);
+  
+  vel = (analogRead(pot) / 4); // velocity set by the potentiometer
+  
   if (target > 0)
   {
+    
     if (now <= target)
     {
+      
       analogWrite(LPWM, 0);
       analogWrite(RPWM, vel);
+
     }
     else
     {
+      
       analogWrite(RPWM, 0);
       analogWrite(LPWM, 0);
       delay(200);
       tgtangle = -30;
+
     }
+
   }
   else
   {
+    
     if (now >= target)
     {
+      
       analogWrite(RPWM, 0);
       analogWrite(LPWM, vel);
+
     }
     else
     {
+      
       analogWrite(RPWM, 0);
       analogWrite(LPWM, 0);
       delay(200);
       tgtangle = 30;
+
     }
   }
+
 }
 
 // function in use to stop the sculpture
@@ -84,11 +98,14 @@ void stopMottor()
 // function that obtain the angle at the moment
 void getAngle()
 {
+  
   static int pos = 0;
   encoder.tick();
   int newPos = encoder.getPosition();
+  
   if (pos != newPos)
   {
+    
     angle = (float)newPos / PPR * 360;
     Serial.print("Desired angle: ");
     Serial.print(tgtangle);
@@ -99,37 +116,47 @@ void getAngle()
     Serial.print(" || RPM: ");
     Serial.println((int)(encoder.getRPM()));
     pos = newPos;
+
   }
 }
 
 void setup()
 {
+  
   Serial.begin(9600);
+
 }
 
 void loop()
 {
-  if (IrReceiv.decode(&result)) // If any signal are detected
+  
+  if (IrReceiv.decode(&result)) // If any signal is detected
   {
+    
     Serial.print(result.bits);
     Serial.print(": ");
     Serial.println(result.value, HEX);
     IrReceiv.resume();
+
   }
+
   switch (result.value) // Stop or Move the sculpture according to the IR code
   {
-  case codeON:
-    getAngle();
-    Serial.println("Move");
-    moveTo(angle, tgtangle);
-    break;
-  case codeOFF:
-    Serial.println("Stop");
-    stopMottor();
-    break;
-  default:
-    Serial.println("ERROR");
-    stopMottor();
-    break;
+  
+    case codeON:
+      getAngle();
+      Serial.println("Move");
+      moveTo(angle, tgtangle);
+      break;
+    
+    case codeOFF:
+      Serial.println("Stop");
+      stopMottor();
+      break;
+    
+    default:
+      Serial.println("ERROR");
+      stopMottor();
+      break;
   }
 }

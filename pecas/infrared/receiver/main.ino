@@ -30,16 +30,16 @@ void loop()
     switch (result.value)
     {
       case codeON:
-
+        // the desired code goes here
         break;
       case code1:
-
+        // the desired code goes here
         break;
       case code2:
-
+        // the desired code goes here
         break;
       case codeOFF:
-
+        // the desired code goes here
         break;
 
       default:

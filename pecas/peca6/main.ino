@@ -22,7 +22,9 @@ const int CLK = 3;
 const int pot = A0;
 float vel = 0;
 
+// declaration of encoder object
 RotaryEncoder encoder(DT, CLK, RotaryEncoder::LatchMode::TWO03);
+
 
 float angle = 0;
 
