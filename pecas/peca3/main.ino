@@ -6,10 +6,14 @@
   CODE FOR 1/4 STEPS, 800 STEPS PER REVOLUTION, 1 * RELATION
 */
 
+// IR receiver parameters 
+const int IR = 9; // pin connected
+IRrecv IrReceiv(IR);
+decode_results result;
+
 // IR codes
 const int codeON = 0xAA1;
 const int codeOFF = 0xAA4;
-
 
 // Arm & Forearm 1 EN - DIR - PUL(STP)
 #define ARM1_EN 22
@@ -267,10 +271,21 @@ void setup()
   digitalWrite(FOREARM3_EN, LOW);
   digitalWrite(FOREARM4_EN, LOW);
 
+  Serial.begin(9600); // or higher baud rate
+  IrReceiv.enableIRIn();
 }
 
 void loop()
 {
+  if (IrReceiv.decode(&result)) // If a signal is detected
+  {
+    Serial.print(result.bits);
+    Serial.print(": ");
+    Serial.println(result.value, HEX); // Prints the code received
+
+    switch (result.value)
+    {
+      case codeON:
   // commands to get data from both arm and forearm, uncomment to separated adjustment of arm and forearm
   getPosition_A1();
   getPosition_FA1();
@@ -461,5 +476,15 @@ void loop()
     digitalWrite(ARM4_STP, LOW);
     delayMicroseconds(delayTime);
 
+  }
+        break;
+        case codeOFF:
+        
+        break;
+        default:
+        Serial.println("ERROR");
+        break;
+    }
+    IrReceiv.resume(); // Clean the receiver for new signals
   }
 }
