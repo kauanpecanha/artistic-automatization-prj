@@ -7,7 +7,7 @@
 */
 
 // IR receiver parameters
-const int IR = 9; // pin connected
+const int IR = 18; // pin connected
 IRrecv IrReceiv(IR);
 decode_results result;
 
