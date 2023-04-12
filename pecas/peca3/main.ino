@@ -3,13 +3,11 @@
 #include <IRremote.hpp> // library for the IR receiver
 
 /* 
-  CODE FOR 1/4 STEPS, 800 STEPS PER REVOLUTION, 1:1 RESOLUTION
+  CODE FOR 1/4 STEPS, 800 STEPS PER REVOLUTION, 1 * RELATION
 */
 
 // IR codes
 const int codeON = 0xAA1;
-const int code1 = 0xAA2;
-const int code2 = 0xAA3;
 const int codeOFF = 0xAA4;
 
 
@@ -230,7 +228,7 @@ void getPosition_FA4()
 
 void setup()
 {
-  
+  // set pins as output
   pinMode(ARM1_DIR, OUTPUT);
   pinMode(ARM1_STP, OUTPUT);
   pinMode(ARM2_DIR, OUTPUT);
@@ -259,6 +257,7 @@ void setup()
   pinMode(FOREARM3_EN, OUTPUT);
   pinMode(FOREARM4_EN, OUTPUT);
   
+  // enable the motor driver
   digitalWrite(ARM1_EN, LOW);
   digitalWrite(ARM2_EN, LOW);
   digitalWrite(ARM3_EN, LOW);
@@ -272,26 +271,27 @@ void setup()
 
 void loop()
 {
-  // commands to get data from both arm and forearm
+  // commands to get data from both arm and forearm, uncomment to separated adjustment of arm and forearm
   getPosition_A1();
   getPosition_FA1();
   Serial.println();
-  getPosition_A2();
-  getPosition_FA2();
-  Serial.println();
-  getPosition_A3();
-  getPosition_FA3();
-  Serial.println();
-  getPosition_A4();
-  getPosition_FA4();
-  Serial.println();
+//   getPosition_A2();
+//   getPosition_FA2();
+//   Serial.println();
+//   getPosition_A3();
+//   getPosition_FA3();
+//   Serial.println();
+//   getPosition_A4();
+//   getPosition_FA4();
+//   Serial.println();
 
   digitalWrite(ARM1_DIR, 1);
   digitalWrite(ARM2_DIR, 1);
   digitalWrite(ARM3_DIR, 1);
   digitalWrite(ARM4_DIR, 1);
   
-  for (int i = 0; i < 800 * RELATION_ARM; i++)
+  // ARM: turn 800 steps (360°) into direction 1
+  for (int i = 0; i < 800 * RELATION_ARM; i++) // multiply the steps for the correct resolution 
   {
     
     digitalWrite(ARM1_STP, HIGH);
@@ -302,15 +302,15 @@ void loop()
     getPosition_A1();
     getPosition_FA1();
     Serial.println();
-    getPosition_A2();
-    getPosition_FA2();
-    Serial.println();
-    getPosition_A3();
-    getPosition_FA3();
-    Serial.println();
-    getPosition_A4();
-    getPosition_FA4();
-    Serial.println();
+//     getPosition_A2();
+//     getPosition_FA2();
+//     Serial.println();
+//     getPosition_A3();
+//     getPosition_FA3();
+//     Serial.println();
+//     getPosition_A4();
+//     getPosition_FA4();
+//     Serial.println();
     digitalWrite(ARM1_STP, LOW);
     digitalWrite(ARM2_STP, LOW);
     digitalWrite(ARM3_STP, LOW);
@@ -326,6 +326,7 @@ void loop()
   digitalWrite(FOREARM3_STP, 1);
   digitalWrite(FOREARM4_STP, 1);
 
+  // FOREARM: turn 900 steps (360°+45°) into direction 1
   for (int i = 0; i < 900 * RELATION_FOREARM; i++)
   {
     
@@ -337,15 +338,15 @@ void loop()
     getPosition_A1();
     getPosition_FA1();
     Serial.println();
-    getPosition_A2();
-    getPosition_FA2();
-    Serial.println();
-    getPosition_A3();
-    getPosition_FA3();
-    Serial.println();
-    getPosition_A4();
-    getPosition_FA4();
-    Serial.println();
+//     getPosition_A2();
+//     getPosition_FA2();
+//     Serial.println();
+//     getPosition_A3();
+//     getPosition_FA3();
+//     Serial.println();
+//     getPosition_A4();
+//     getPosition_FA4();
+//     Serial.println();
     digitalWrite(FOREARM1_STP, LOW);
     digitalWrite(FOREARM2_STP, LOW);
     digitalWrite(FOREARM3_STP, LOW);
@@ -361,6 +362,7 @@ void loop()
   digitalWrite(FOREARM3_STP, 0);
   digitalWrite(FOREARM4_STP, 0);
   
+  // FOREARM: turn 100 steps (-45°) into direction 0
   for (int i = 0; i < 100 * RELATION_FOREARM; i++)
   {
     
@@ -372,15 +374,15 @@ void loop()
     getPosition_A1();
     getPosition_FA1();
     Serial.println();
-    getPosition_A2();
-    getPosition_FA2();
-    Serial.println();
-    getPosition_A3();
-    getPosition_FA3();
-    Serial.println();
-    getPosition_A4();
-    getPosition_FA4();
-    Serial.println();
+//     getPosition_A2();
+//     getPosition_FA2();
+//     Serial.println();
+//     getPosition_A3();
+//     getPosition_FA3();
+//     Serial.println();
+//     getPosition_A4();
+//     getPosition_FA4();
+//     Serial.println();
     digitalWrite(FOREARM1_STP, LOW);
     digitalWrite(FOREARM2_STP, LOW);
     digitalWrite(FOREARM3_STP, LOW);
@@ -396,6 +398,7 @@ void loop()
   digitalWrite(ARM3_STP, 0);
   digitalWrite(ARM4_STP, 0);
 
+  // ARM: turn 100 steps (-45°) into direction 0
   for (int i = 0; i < 100 * RELATION_ARM; i++)
   {
     
@@ -407,15 +410,15 @@ void loop()
     getPosition_A1();
     getPosition_FA1();
     Serial.println();
-    getPosition_A2();
-    getPosition_FA2();
-    Serial.println();
-    getPosition_A3();
-    getPosition_FA3();
-    Serial.println();
-    getPosition_A4();
-    getPosition_FA4();
-    Serial.println();
+//     getPosition_A2();
+//     getPosition_FA2();
+//     Serial.println();
+//     getPosition_A3();
+//     getPosition_FA3();
+//     Serial.println();
+//     getPosition_A4();
+//     getPosition_FA4();
+//     Serial.println();
     digitalWrite(ARM1_STP, LOW);
     digitalWrite(ARM2_STP, LOW);
     digitalWrite(ARM3_STP, LOW);
@@ -431,6 +434,7 @@ void loop()
   digitalWrite(ARM3_STP, 1);
   digitalWrite(ARM4_STP, 1);
   
+  // FOREARM: turn 100 steps (45°) into direction 1
   for (int i = 0; i < 100 * RELATION_ARM; i++)
   {
     
@@ -442,15 +446,15 @@ void loop()
     getPosition_A1();
     getPosition_FA1();
     Serial.println();
-    getPosition_A2();
-    getPosition_FA2();
-    Serial.println();
-    getPosition_A3();
-    getPosition_FA3();
-    Serial.println();
-    getPosition_A4();
-    getPosition_FA4();
-    Serial.println();
+//     getPosition_A2();
+//     getPosition_FA2();
+//     Serial.println();
+//     getPosition_A3();
+//     getPosition_FA3();
+//     Serial.println();
+//     getPosition_A4();
+//     getPosition_FA4();
+//     Serial.println();
     digitalWrite(ARM1_STP, LOW);
     digitalWrite(ARM2_STP, LOW);
     digitalWrite(ARM3_STP, LOW);
