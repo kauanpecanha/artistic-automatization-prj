@@ -485,6 +485,8 @@ void loop()
         Serial.println("ERROR");
         break;
     }
+    
     IrReceiv.resume(); // Clean the receiver for new signals
+    
   }
 }
