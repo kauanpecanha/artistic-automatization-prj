@@ -33,9 +33,7 @@ const int codeON = 0xAA1;  // on
 const int code1 = 0xAA2;   // first sequence signal
 const int code2 = 0xAA3;   // second sequence signal
 const int code3 = 0xAA4;   // third sequence signal
-const int code4 = 0xAA5;   // fourth sequence signal
-const int code5 = 0xAA6;   // fifth sequence signal
-const int codeOFF = 0xAA7; // off
+const int codeOFF = 0xAA5; // off
 
 // IR receive parameters
 const int IR = 9;
