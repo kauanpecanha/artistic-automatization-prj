@@ -25,19 +25,33 @@ float vel = 0;
 // declaration of encoder object
 RotaryEncoder encoder(DT, CLK, RotaryEncoder::LatchMode::TWO03);
 
-
+// variable to angle control
 float angle = 0;
 
-void moveTo(float now, float target)
+// ON/OFF codes
+const int codeON = 0xAA1;  // on
+const int code1 = 0xAA2;   // first sequence signal
+const int code2 = 0xAA3;   // second sequence signal
+const int code3 = 0xAA4;   // third sequence signal
+const int code4 = 0xAA5;   // fourth sequence signal
+const int code5 = 0xAA6;   // fifth sequence signal
+const int codeOFF = 0xAA7; // off
+
+// IR receive parameters
+const int IR = 9;
+IRrecv IrReceiv(IR);
+decode_results result;
+
+void moveTo(float now, float target) // function to rotate the motor to specific angles
 {
-  vel = (analogRead(pot) / 4);
+  vel = (analogRead(pot) / 4); // velocity setting
 
   if (target > 0)
   {
     if (now <= target)
     {
       analogWrite(LPWM, 0);
-      analogWrite(RPWM, vel);
+      analogWrite(RPWM, vel); // right rotation
     }
     else
     {
@@ -49,7 +63,7 @@ void moveTo(float now, float target)
     if (now >= target)
     {
       analogWrite(RPWM, 0);
-      analogWrite(LPWM, vel);
+      analogWrite(LPWM, vel); // left rotation
     }
     else
     {
@@ -58,13 +72,13 @@ void moveTo(float now, float target)
   }
 }
 
-void stopMotor()
+void stopMotor() // function to stop the motor rotation
 {
   analogWrite(RPWM, 0);
   analogWrite(RPWM, 0);
 }
 
-void getAngle()
+void getAngle() // printing data function
 {
   static int pos = 0;
   encoder.tick();
@@ -89,31 +103,47 @@ void setup()
 
 void loop()
 {
-  // 1st signal is received
-  while (angle < 90){
-  getAngle();
-  moveTo(angle, 90);
-  }
-  delay(30000);
-  
-  // 2nd signal is received
-  while (angle > -90)
+  switch (result.vawlue)
   {
-  getAngle();
-  moveTo(angle, -90);
-  }
-  delay(30000);
-  
-  // 3rd signal is received
-  while (angle < 90)
-  {
-  getAngle();
-  moveTo(angle, 90);
-  }
-  delay(30000);
+    case codeON:
+      // 1st signal is received
+      while (angle < 90)
+      {
+        getAngle();
+        moveTo(angle, 90);
+      }
+      delay(30000);
 
-  // 5th signal is received, 4th signal is ignored
-  getAngle();
-  stopMotor();
-  delay(30000);
+    case code1:
+      // 2nd signal is received
+      while (angle > -90)
+      {
+        getAngle();
+        moveTo(angle, -90);
+      }
+      delay(30000);
+
+    case code2:
+      // 3rd signal is received
+      while (angle < 90)
+      {
+        getAngle();
+        moveTo(angle, 90);
+      }
+      delay(30000);
+
+    case code3:
+      // 5th signal is received, 4th signal is ignored
+      getAngle();
+      stopMotor();
+      delay(30000);
+
+    case codeOFF:
+      stopMotor();
+
+    default:
+
+      Serial.println("ERROR");
+      break;
+  }
 }
