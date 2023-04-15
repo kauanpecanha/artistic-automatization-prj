@@ -71,8 +71,8 @@ void stopMotor() /*  function to stop the motor rotation  */
 void setup()
 {
   Serial.begin(9600);
-  pinMode(6, OUTPUT);
-  pinMode(5, OUTPUT);
+  pinMode(RPWM, OUTPUT);
+  pinMode(LPWM, OUTPUT);
   IrReceiv.enableIRIn();
 }
 
