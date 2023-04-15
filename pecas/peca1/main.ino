@@ -124,7 +124,9 @@ void setup()
 {
   
   Serial.begin(9600);
-
+  pinMode(RPWM, OUTPUT);
+  pinMode(LPWM, OUTPUT);
+  
 }
 
 void loop()
