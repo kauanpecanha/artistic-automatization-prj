@@ -88,8 +88,9 @@ void loop()
     Serial.print(result.bits);
     Serial.print(": ");
     Serial.println(result.value, HEX);
-
-    switch (result.value)
+    IrReceiv.resume();
+  }
+   switch (result.value)
     {
 
     case codeON: 
@@ -325,7 +326,5 @@ void loop()
       Serial.println("ERROR");
       break;
     }
-    IrReceiv.resume();
-  }
   delay(1000);
 }
