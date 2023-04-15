@@ -36,7 +36,7 @@ decode_results result;
 
 // ON/OFF codes
 const int codeON = 0xAA1; // on
-const int codeOFF = 0xAA4; // off
+const int codeOFF = 0xAA5; // off
 
 // function in use to move the sculpture 30 degrees / -30 degrees 
 void moveTo(float now, float target)
