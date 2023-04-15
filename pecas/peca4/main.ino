@@ -85,11 +85,9 @@ void loop()
     Serial.print(result.bits);
     Serial.print(": ");
     Serial.println(result.value, HEX);
-
-    sequencia = random(1, 5);
-    switch (sequencia)
-
-    switch (result.value)
+    IrReceiv.resume();
+  }
+  switch (result.value)
     {
       
       case codeON:
@@ -205,11 +203,6 @@ void loop()
         
         break;
     }
-    
-    IrReceiv.resume();
-
-  }
-  
   delay(1000); // a second delay
 
 }
