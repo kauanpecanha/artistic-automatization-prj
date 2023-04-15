@@ -98,6 +98,8 @@ void setup()
 {
   Serial.begin(9600);
   IrReceiv.enableIRIn();
+  pinMode(RPWM, OUTPUT);
+  pinMode(LPWM, OUTPUT);
 }
 
 void loop()
