@@ -13,7 +13,7 @@ decode_results result;
 
 // IR codes
 const int codeON = 0xAA1;
-const int codeOFF = 0xAA4;
+const int codeOFF = 0xAA5;
 
 // Arm & Forearm 1 EN - DIR - PUL(STP)
 #define ARM1_EN 22
