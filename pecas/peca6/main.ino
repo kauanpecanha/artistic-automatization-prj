@@ -120,7 +120,6 @@ void loop()
         getAngle();
         moveTo(angle, 90);
       }
-      delay(30000);
 
     case code1:
       // 2nd signal is received
@@ -129,7 +128,6 @@ void loop()
         getAngle();
         moveTo(angle, -90);
       }
-      delay(30000);
 
     case code2:
       // 3rd signal is received
@@ -138,13 +136,11 @@ void loop()
         getAngle();
         moveTo(angle, 90);
       }
-      delay(30000);
 
     case code3:
-      // 5th signal is received, 4th signal is ignored
+      // 4th signal is received, 4th signal is ignored
       getAngle();
       stopMotor();
-      delay(30000);
 
     case codeOFF:
       stopMotor();
