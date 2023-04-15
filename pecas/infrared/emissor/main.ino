@@ -11,7 +11,8 @@ const int IR = 9; // pin connected
 int codeON = 0xAA1;
 //int code1 = 0xAA2;
 //int code2 = 0xAA3;
-//int codeOFF = 0xAA4;
+//int code3 = 0xAA4;
+//int codeOFF = 0xAA5;
 
 int nBits = 12;
 
