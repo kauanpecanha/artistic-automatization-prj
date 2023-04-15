@@ -282,8 +282,9 @@ void loop()
     Serial.print(result.bits);
     Serial.print(": ");
     Serial.println(result.value, HEX); // Prints the code received
-
-    switch (result.value)
+    IrReceiv.resume(); // Clean the receiver for new signals
+  }
+   switch (result.value)
     {
       case codeON:
         // commands to get data from both arm and forearm, uncomment to separated adjustment of arm and forearm
@@ -486,7 +487,4 @@ void loop()
         break;
     }
     
-    IrReceiv.resume(); // Clean the receiver for new signals
-    
-  }
 }
