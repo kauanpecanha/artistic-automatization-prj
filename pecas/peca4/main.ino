@@ -23,8 +23,6 @@ float vel = 0;
 // potentiometer center pin
 int pot = A0;
 
-int sequencia = 0;
-
 // variable to get the beggining millisecond of a movement
 long currentMillis;
 
