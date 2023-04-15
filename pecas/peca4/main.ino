@@ -72,8 +72,6 @@ void setup()
 {
   // fourth sculpture settings
   Serial.begin(9600);
-  pinMode(6, OUTPUT);
-  pinMode(5, OUTPUT);
   IrReceiv.enableIRIn();
   pinMode(RPWM, OUTPUT);
   pinMode(LPWM, OUTPUT);
