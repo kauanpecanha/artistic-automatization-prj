@@ -413,6 +413,7 @@ void loop()
         default:
             
             Serial.println("ERROR");
+            stopMotor();
             break;
 
     }
