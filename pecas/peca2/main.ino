@@ -319,12 +319,11 @@ void setup()
 {
 
     Serial.begin(9600);
-    pinMode(6, OUTPUT);
-    pinMode(5, OUTPUT);
     IrReceiv.enableIRIn();
     myservo.attach(PWM_PIN);
     pinMode(RPWM, OUTPUT);
     pinMode(LPWM, OUTPUT);
+    
 }
 
 void loop()
