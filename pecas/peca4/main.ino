@@ -14,7 +14,8 @@ decode_results result;
 const int codeON = 0xAA1;
 const int code1 = 0xAA2;
 const int code2 = 0xAA3;
-const int codeOFF = 0xAA4;
+const int code3 = 0xAA4;
+const int codeOFF = 0xAA5;
 
 // velocity variable
 float vel = 0;
