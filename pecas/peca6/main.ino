@@ -97,10 +97,18 @@ void getAngle() // printing data function
 void setup()
 {
   Serial.begin(9600);
+  IrReceiv.enableIRIn();
 }
 
 void loop()
 {
+  if (IrReceiv.decode(&result))
+  {
+    Serial.print(result.bits);
+    Serial.print(": ");
+    Serial.println(result.value, HEX);
+    IrReceiv.resume();
+  }
   switch (result.vawlue)
   {
     case codeON:
@@ -140,7 +148,7 @@ void loop()
       stopMotor();
 
     default:
-
+      stopMotor();
       Serial.println("ERROR");
       break;
   }
