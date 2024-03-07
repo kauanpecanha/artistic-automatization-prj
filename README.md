@@ -1,18 +1,21 @@
-# Project of Artistic Mechanic Pieces
+# Laura Lima's Balet Literal
+### Barcelona May, 2023 - September, 2023
 
-This project is looking foward to develop arduino software in order to automate artistic sculptures that are going to be presented at an art exhibition in Barcelona, Spain, in the middle of 2023.
+![UERJ's Article about the project](./images/lauralima1.png)
+[Access here the article](https://www.uerj.br/noticia/empresa-junior-da-uerj-participa-de-mostra-da-artista-visual-laura-lima-no-museu-de-arte-contemporanea-de-barcelona/)
 
-# Basic Structure of this directory
+This project was made in order to develop the software of six mechanical artistic sculptures.
 
-- peca1: Code developed to the first piece
-- peca2: Code developed to the second piece
-- peca3: Code developed to the third piece
-- peca4: Code developed to the fourth piece
-- peca5: Code developed to the fifth piece
-- peca6: Code developed to the sixth piece
-- container: All the codes that are still going to be tested
-- infrared: Contains the folders with the specific codes to both infrared receiver and transmitter that are going to be incorporated into the components codes.
 
+## Basic Structure of this directory
+
+- peca1: Code developed to the first sculpture
+- peca2: Code developed to the second sculpture
+- peca3: Code developed to the third sculpture
+- peca4: Code developed to the fourth sculpture
+- peca5: Code developed to the fifth sculpture
+- peca6: Code developed to the sixth sculpture
+- infrared: Contains the folders with the specific codes to both infrared receiver and transmitter that are going to be incorporated into the components' codes.
 
 ## Autores
 
